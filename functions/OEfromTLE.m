@@ -31,8 +31,12 @@ while(t)
     E0 = E;
     itt = itt+1;
 end
+
+E2f_coeff = sqrt((1+e)/(1-e));
+
+
 % Six orbital elements
-orbit = [a e inc RAAN w E];
-fprintf('\n a [km] \t\t e \t\t\t\t inc[deg] \t\t RAAN[deg] \t\t  w[deg] \t\t E[deg] \n ')
+orbit = [a e inc argP RAAN E];
+fprintf('\n a [km] \t\t e \t\t\t\t inc[deg] \t\t RAAN[deg] \t\t  w[deg] \t\t f[deg] \n ')
 fprintf('%4.2f \t\t %4.4f \t\t %4.4f \t\t %4.4f \t\t  %4.4f \t\t %4.4f', orbit);
 end
