@@ -11,10 +11,10 @@ km = 1e3;
 
 %% Set input
 OE = OEfromTLE("25544 ISS (ZARYA).txt")
-[r_0, v_0] = OE2rv(OE(1), OE(2), OE(3), OE(4), OE(5), OE(6));
+[r_0, v_0] = OE2rv(OE);
 
-r_0 = [-4580.3; 6582.7; -180.95]*km; %m
-v_0 = [-5.8396; 3.0075; 1.758]*km; %m/s
+% r_0 = [-4580.3; 6582.7; -180.95]*km; %m
+% v_0 = [-5.8396; 3.0075; 1.758]*km; %m/s
 
 initCond = [r_0; v_0];
 
@@ -23,7 +23,7 @@ initCond = [r_0; v_0];
 t = [0:60:48*hr];
 options = odeset('AbsTol',1e-9,'RelTol',1e-6);
 [~,x] = ode45('TBP', t, initCond, options);
-[~,x_h] = ode45('TBP_Harmonics', t, initCond, options);
+[t_h,x_h] = ode45('TBP_Harmonics', t, initCond, options);
 
 r = x(:,1:3);
 r_h = x_h(:,1:3)

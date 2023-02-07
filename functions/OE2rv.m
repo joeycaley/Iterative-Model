@@ -1,9 +1,16 @@
-function [r_I, v_I] = OE2rv(a, e, i, argP, RAAN, f)
+function [r_I, v_I] = OE2rv(OE)
 % Convert orbital data from orbital elements [semimajor axis (m),
 % eccentricity (unitless), inclination (radians), argument of periapsis
 % (radians), right ascension of ascending node (radians), true anamoly
 % (radians)] to radius (m) and velocity (m/s) vectors in the Earth centered
 % inertial frame
+
+a =    OE(1);
+e =    OE(2);
+i =    OE(3);
+argP = OE(4);
+RAAN = OE(5);
+f =    OE(6);
 
 mu = 3.986004*10^14;
 
@@ -26,7 +33,10 @@ r_O = [r_mag*cos(f); r_mag*sin(f); 0];
 f_dot = h_mag/r_mag^2;
 r_dot = h_mag*e/p*sin(f);
 
-v_O = [r_dot*cos(f) - r_mag*f_dot*sin(f); r_dot*sin(f)+r_mag*f_dot*cos(f);0];
+v_O = [...
+    r_dot*cos(f) - r_mag*f_dot*sin(f); ...
+    r_dot*sin(f) + r_mag*f_dot*cos(f); ...
+    0];
 
 % create the DCM using 3-1-3 euler angles 
 cw = cos(argP);

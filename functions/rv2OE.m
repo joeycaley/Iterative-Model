@@ -1,7 +1,7 @@
-function [a, e, omega, i, lil_omega, f_0] = rv2OE(r_I, v_I, mu)
+function OE = rv2OE(r_I, v_I, mu)
 % Given some mu (m^3/s^2), convert between initial inertial radius (m) and 
-% velocity (m/s) to the orbital elements a (m), e (N/A), i (rad), omega 
-% (rad), little omega (rad), and f_0 (rad)
+% velocity (m/s) to the orbital elements a (m), e (N/A), i (rad), little 
+% omega (rad), omega (rad), and f_0 (rad)
 
     % find angular momentum
     h = cross(r_I, v_I);
@@ -34,4 +34,6 @@ function [a, e, omega, i, lil_omega, f_0] = rv2OE(r_I, v_I, mu)
     c_f = r_O(1)/norm(r_O);
     s_f = r_O(2)/norm(r_O);
     f_0 = atan2(s_f,c_f); %true anamoly, degrees
+
+    OE = [a, e, i, lil_omega, omega, f_0];
 end
