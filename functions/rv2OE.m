@@ -35,5 +35,5 @@ function OE = rv2OE(r_I, v_I, mu)
     s_f = r_O(2)/norm(r_O);
     f_0 = atan2(s_f,c_f); %true anamoly, degrees
 
-    OE = [a, e, i, lil_omega, omega, f_0];
+    OE = [a, e, i, omega, lil_omega, f_0];
 end

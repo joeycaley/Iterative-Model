@@ -19,14 +19,17 @@ OE = OEfromTLE("25544 ISS (ZARYA).txt")
 initCond = [r_0; v_0];
 
 
-%% Propogate forward
+%% Set Input and Propogate forward
+TLE = "25544 ISS (ZARYA).txt";
 t = [0:60:48*hr];
+
+[OE, x_his] = createOrbit(TLE,t);
+
 options = odeset('AbsTol',1e-9,'RelTol',1e-6);
 [~,x] = ode45('TBP', t, initCond, options);
-[t_h,x_h] = ode45('TBP_Harmonics', t, initCond, options);
 
 r = x(:,1:3);
-r_h = x_h(:,1:3)
+r_h = x_his(:,1:3);
 
 figure()
 grid on
