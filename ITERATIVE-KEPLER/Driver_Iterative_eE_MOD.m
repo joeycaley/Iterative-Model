@@ -1,6 +1,8 @@
 clear; close all; clc;
 global mu_earth;
 
+addpath('iterKepfunctions\')
+
 % unit conversions
 HR = 3600;
 dtr = pi/180;
