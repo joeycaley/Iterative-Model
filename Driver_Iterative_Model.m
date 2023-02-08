@@ -1,6 +1,9 @@
-clear; close all; clc;
+clear; close all;
 
+restoredefaultpath
 addpath('functions')
+
+global hr deg2rad mu_e R_e km
 
 % unit conversions
 hr = 3600;
@@ -16,13 +19,21 @@ TLE = "25544 ISS (ZARYA).txt";
 t = [0:60:48*hr]; %MUST BE GREATER THAN 1 PERIOD
 
 % measurment
-t_1 = .3;
-t_2 = .5;
+t1 = .3;
+t2 = .5;
+
+% gains
+G = 0.010;
+
+% initial guess
+J2 = 1*10^-6;
 
 
 %% Propogate orbit
 
+% harmonics dynamics
 [OE, x_h] = createOrbit(TLE, t);
+r_h = x_h(:,1:3);
 
 % standard TBP check
 OE = OEfromTLE("25544 ISS (ZARYA).txt")
@@ -32,9 +43,6 @@ options = odeset('AbsTol',1e-9,'RelTol',1e-6);
 [~,x] = ode45('TBP', t, initCond, options);
 r = x(:,1:3);
 
-[t_h,x_h] = ode45('TBP_Harmonics', t, initCond, options);
-r_h = x_h(:,1:3)
-
 figure()
 grid on
 hold on
@@ -43,4 +51,7 @@ plot3(r_h(:,1),r_h(:,2),r_h(:,3))
 hold off
 
 %% Create measurment
+
+[r1, rd1m] = create_msmt(t1, OE, r, t, 1);
+[r2, rd2m] = create_msmt(t2, OE, r, t, 1);
 

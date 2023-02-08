@@ -1,6 +1,8 @@
 function OE = OEfromTLE(fname)
-mu = 3.986004e14; %  Standard gravitational parameter for the earth
-d2r = pi/180;
+
+
+global mu_e %  Standard gravitational parameter for the earth
+global deg2rad
 
 
 % Open the TLE file and read TLE elements
@@ -12,18 +14,18 @@ epochY = str2double(tline(19:20));                          % Epoch year
 epochD = str2double(tline(21:32));                            % Epoch day
 epochH = str2double(tline(24:32));                      % Epoch hour
 
-% Close the TLE file
-fclose(fname)
-
 % read second line
 tline = fgetl(fid);
-inc = str2double(tline(9:16))*d2r;                           % Orbit Inclination (rad)
-RAAN = str2double(tline(18:25))*d2r;                         % Right Ascension of Ascending Node (rad)
+inc = str2double(tline(9:16))*deg2rad;                           % Orbit Inclination (rad)
+RAAN = str2double(tline(18:25))*deg2rad;                         % Right Ascension of Ascending Node (rad)
 e = str2double(strcat('0.',tline(27:33)));                   % Eccentricity
-argP = str2double(tline(35:42))*d2r;                         % Argument of Perigee (rad)
-M = str2double(tline(44:51))*d2r;                            % Mean Anomaly (rad)
-a = ( mu / (str2double(tline(53:63))*2*pi/86400)^2 )^(1/3);    % semi major axis
+argP = str2double(tline(35:42))*deg2rad;                         % Argument of Perigee (rad)
+M = str2double(tline(44:51))*deg2rad;                            % Mean Anomaly (rad)
+a = ( mu_e / (str2double(tline(53:63))*2*pi/86400)^2 )^(1/3);    % semi major axis
 n = str2double(tline(64:68));                                % Revolution Number at Epoch
+
+% Close the TLE file
+fclose(fid)
 
 err = 1e-10;            %Calculation Error
 E0 = M; t = 1;
