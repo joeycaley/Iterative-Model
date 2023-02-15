@@ -68,11 +68,13 @@ E2m_his(1) = E2_estm;
 ictr = ictr+1;
 
 %% GAIN
-G = 0.010;
+G_p = 0.010;
+G_i = 0.010;
 
 %% Iterations
 while abs(err_curr) > thres && ictr < iternum && err_flag == 0
-    e_curr = e_curr - G*err_curr;
+%     e_curr = e_curr - G_p*err_curr;
+    e_curr = e_curr - G_p*err_curr - G_i*sum(err_his);
     e_est(ictr) = e_curr;
     
     if e_curr >= 0 
