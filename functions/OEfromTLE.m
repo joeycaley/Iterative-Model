@@ -25,6 +25,7 @@ a = ( mu_e / (str2double(tline(53:63))*2*pi/86400)^2 )^(1/3);    % semi major ax
 n = str2double(tline(64:68));                                % Revolution Number at Epoch
 
 % Close the TLE file
+
 fclose(fid)
 
 err = 1e-10;            %Calculation Error
@@ -44,7 +45,7 @@ E2f_coeff = sqrt((1+e)/(1-e));
 f = 2*atan(E2f_coeff*tan(E/2));
 
 % Six orbital elements
-OE = [a e inc argP RAAN f];
-fprintf('\n a [km] \t\t e \t\t\t\t inc[rad] \t\t w[rad] \t\t RAAN[rad] \t\t f[rad] \n ')
+OE = [a e inc RAAN argP f];
+fprintf('\n a [km] \t\t e \t\t\t\t inc[rad] \t\t RAAN[rad] \t\t w[rad] \t\t f[rad] \n ')
 fprintf('%4.2f \t\t %4.4f \t\t %4.4f \t\t %4.4f \t\t  %4.4f \t\t %4.4f\n', [OE(1)/1000 OE(2:end)]);
 end

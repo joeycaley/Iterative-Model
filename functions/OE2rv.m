@@ -8,8 +8,8 @@ function [r_I, v_I] = OE2rv(OE)
 a =    OE(1);
 e =    OE(2);
 i =    OE(3);
-argP = OE(4);
-RAAN = OE(5);
+RAAN = OE(4);
+argP = OE(5);
 f =    OE(6);
 
 mu = 3.986004*10^14;

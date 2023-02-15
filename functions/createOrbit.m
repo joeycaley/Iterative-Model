@@ -6,6 +6,7 @@ function [OE, x_his, initCond] = createOrbit(TLE,t)
 % Return: the orbit's orbital elements (OE in the form a, e, i, RAAN, argP,
 
 OE = OEfromTLE(TLE);
+
 [r_0, v_0] = OE2rv(OE);
 
 initCond = [r_0; v_0];
