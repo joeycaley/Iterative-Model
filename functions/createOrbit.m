@@ -1,4 +1,4 @@
-function [OE, x_his] = createOrbit(TLE,t)
+function [OE, x_his, initCond] = createOrbit(TLE,t)
 % Create an orbit with TBP harmonic dynamics for a given two line element 
 % set text tile (TLE, written in the form of the file name) for some 
 % duration (t, seconds).

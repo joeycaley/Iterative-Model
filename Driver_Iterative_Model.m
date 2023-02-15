@@ -26,13 +26,19 @@ t2 = .5;
 G = 0.010;
 
 % initial guess
-J2 = 1*10^-6;
+J2est = 1*10^-6;
 
+% Max number of iterations
+maxiter = 500;
+
+% create histories
+J2est_hist = zeros(maxiter,1);
+r2est_hist = zeros(maxiter,1);
 
 %% Propogate orbit
 
 % harmonics dynamics
-[OE, x_h] = createOrbit(TLE, t);
+[OE, x_h, initCond] = createOrbit(TLE, t);
 r_h = x_h(:,1:3);
 
 % standard TBP check
@@ -52,6 +58,17 @@ hold off
 
 %% Create measurment
 
-[r1, rd1m] = create_msmt(t1, OE, r, t, 1);
-[r2, rd2m] = create_msmt(t2, OE, r, t, 1);
+[r1, rd1m] = create_msmt(1, t1, OE, r, t);
+[r2, rd2m] = create_msmt(1, t2, OE, r, t);
 
+%% Setup first run
+
+
+
+%% Iterations
+
+for i = 2:maxiter
+    
+    
+
+end

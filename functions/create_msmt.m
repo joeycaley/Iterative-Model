@@ -1,4 +1,4 @@
-function [msmt, rdm] = create_msmt(t_m, OE, r, t, msmt_type)
+function [msmt, rdm] = create_msmt(msmt_type, t_m, OE, r, t)
 % Create measurement at a given time (t_m, fraction of period) for a given 
 % set of orbit data (OE, r (m), and t (sec)) of a given measurement type 
 % (msmt_type). Assume geocentric orbit.

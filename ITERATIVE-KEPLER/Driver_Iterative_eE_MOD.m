@@ -73,7 +73,7 @@ G_i = 0.010;
 
 %% Iterations
 while abs(err_curr) > thres && ictr < iternum && err_flag == 0
-    e_curr = e_curr - G_p*err_curr;
+%     e_curr = e_curr - G_p*err_curr;
     e_curr = e_curr - G_p*err_curr - G_i*sum(err_his);
     e_est(ictr) = e_curr;
     
