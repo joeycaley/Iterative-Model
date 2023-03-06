@@ -131,58 +131,6 @@ else
     error("ERROR SOLVER TYPE UNDEFINED")
 end
 
-% if solv_type == 1
-%     for i = 1:max_iter
-%         for j = 1:num_msmt
-%             % Propogate from 0
-%             options = odeset('AbsTol',AbsTol,'RelTol',RelTol);
-%     
-%             [t_loop,x_loop] = ode45(@(t_loop,x_loop) TBP_UnknownHarmonics(...
-%                 t_loop,x_loop,J2_est), [0 t_msmt(j)], initCond, options);
-%     
-%             r_est = norm(x_loop(end,1:3));
-%     
-%             err = r_est - r_msmt(j);
-%             J2_est = J2_est - Kp*err;
-%     
-%             % input histories
-%             err_hist(i,j) = err;
-%             r_estHist(i,j) = r_est;
-%             J2_estHist(i,j) = J2_est;
-%         end
-%     end
-% 
-% elseif solv_type == 2
-%     for i = 1:max_iter
-%         for j = 1:num_msmt
-%             
-%             % Propogate from previous msmt
-%             if j ~= 1
-%                 initCondLoop = x_loop(end)';
-%             else
-%                 initCondLoop = initCond;
-%             end
-%             options = odeset('AbsTol',AbsTol,'RelTol',RelTol);
-%     
-%             [t_loop,x_loop] = ode45(@(t_loop,x_loop) TBP_UnknownHarmonics(...
-%                 t_loop,x_loop,J2_est), [0 t_msmt(j)], initCond, options);
-%     
-%             r_est = norm(x_loop(end,1:3));
-%     
-%             err = r_est - r_msmt(j);
-%             J2_est = J2_est - Kp*err;
-%     
-%             % input histories
-%             err_hist(i,j) = err;
-%             r_estHist(i,j) = r_est;
-%             J2_estHist(i,j) = J2_est;
-%         end
-%     end
-% 
-% else
-%     error("ERROR SOLVER TYPE UNDEFINED")
-% end
-
 
 %% Plot
 Plot_Iterative_Model
