@@ -5,13 +5,15 @@ function [OE, x_his, initCond] = createOrbit(TLE,t)
 %
 % Return: the orbit's orbital elements (OE in the form a, e, i, RAAN, argP,
 
+global AbsTol RelTol
+
 OE = OEfromTLE(TLE);
 
 [r_0, v_0] = OE2rv(OE);
 
 initCond = [r_0; v_0];
 
-options = odeset('AbsTol',1e-9,'RelTol',1e-6);
+options = odeset('AbsTol',AbsTol,'RelTol',RelTol);
 [~, x_his] = ode45('TBP_Harmonics', t, initCond, options);
 
 end

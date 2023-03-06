@@ -21,8 +21,8 @@ orbit_setup
 
 %% Set up the iterations USER INPUT
 %measurements
-t1m = 0.05*P_nom;   %og first measurement @ clock time: 20% of period
-t2m = 0.48*P_nom;   %og second measurement @ clock time: 40% of period
+t1m = 0.20*P_nom;   %og first measurement @ clock time: 20% of period
+t2m = 0.40*P_nom;   %og second measurement @ clock time: 40% of period
 
 [f1_nom, E1_nom, r1m, rd1m] = createMeasurement(mue, orb_nom, t, xhis, t1m);
 [f2_nom, E2_nom, r2m, rd2m] = createMeasurement(mue, orb_nom, t, xhis, t2m);
@@ -69,7 +69,7 @@ ictr = ictr+1;
 
 %% GAIN
 G_p = 0.010;
-G_i = 0.010;
+G_i = 0.000;
 
 %% Iterations
 while abs(err_curr) > thres && ictr < iternum && err_flag == 0
