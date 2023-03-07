@@ -15,37 +15,47 @@ km = 1e3;
 AbsTol = 1e-9;
 RelTol = 1e-8;
 
-J2 = 1082.63*10^-6;
+J2_truth = 1082.63*10^-6;
 
-%% Set input and settings
+%% Set inputs and settings
 
-% TLE
+%-TLE---------------------------------------------------------------------%
 TLE = "25544 ISS (ZARYA).txt";
 % TLE = "MOLNIYA-3-50.txt";
 % TLE = 'LANDSAT-7.txt';
 t = [0:1:48*hr]; %MUST BE GREATER THAN 1 PERIOD
 
-% measurment time as function of period
-t_msmt = [.05:.1:.6];
-msmt_type = 1;
-% 1: range msmt
+
+%-MEASUREMENT SETTINGS----------------------------------------------------%
+t_msmt = [.05:.1:.25]; %as a fraction of orbit period
+msmt_type = 2;
+% 1: range msmt, perfect with no noise
+% 2: range msmt with noise
 
 
-% solver
+%-SOLVER------------------------------------------------------------------%
 solv_type = 2;
 % 1: start prop from 0 each time
 % 2: start prop from prev msmt
 
-% gains
+
+%-GAINS-------------------------------------------------------------------%
 Kp = 1.0e-8;
 
-% initial guess
+
+%-INITIAL J2 GUESS--------------------------------------------------------%
 J2_estInit = 1*10^-3;
 % J2_estInit = 6.484993079129698e-04;
-% J2_estInit = 1082.63*10^-6;
+% J2_estInit = J2_truth;
 
-% Max number of iterations
+
+%-MAX NUMBER OF ITERATIONS------------------------------------------------%
 max_iter = 50;
+
+
+%-SEED--------------------------------------------------------------------%
+rng(0)
+
 
 %% Propogate orbit
 
@@ -92,7 +102,7 @@ viable_solv = [1 2];
 
 % create histories
 r_estHist = zeros(max_iter, length(t_msmt));
-err_hist = zeros(max_iter, length(t_msmt));
+err_hist = zeros(max_iter, length(t_msmt) + 1);
 J2_estHist = zeros(max_iter, length(t_msmt));
 
 %% Iterations
@@ -125,12 +135,26 @@ if max(solv_type == viable_solv)
             err_hist(i,j) = err;
             r_estHist(i,j) = r_est;
             J2_estHist(i,j) = J2_est;
+
+            % calculate mean error after last measurement run
+            if j == num_msmt
+                err_hist(i,j+1) = mean(err_hist(i,1:j));
+            end
         end
     end
 else
     error("ERROR SOLVER TYPE UNDEFINED")
 end
 
+format shortEng
+
+fprintf("\nTRUE J2:          ")
+disp(J2_truth)
+
+fprintf("FINAL J2 ESTIMATE:")
+disp(J2_estHist(end,:))
+
+format short
 
 %% Plot
 Plot_Iterative_Model
