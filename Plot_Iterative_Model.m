@@ -1,5 +1,5 @@
 % plotting settings
-fig_width = 600;
+fig_width = 1800;
 fig_height = 350;
 
 fig_x = 0;
@@ -8,29 +8,86 @@ delta_y = 450;
 
 iterMax_fig = 50;
 
-%% Resize data
-iter_vec = [0; [1: 1/num_msmt : max_iter + (1 - 1/num_msmt)]'];
-J2_estHistPlot = [J2_estInit; reshape(J2_estHist',[],1)];
-err_histPlot = [J2_estInit - J2; reshape(err_hist',[],1)];
+
+
+%% Create iteration vector
+for i = 1:num_msmt
+    iter_vec(:,i) = [1 + (i-1)/num_msmt: 1 : max_iter + (i-1)/num_msmt]';
+end
+
+[markers, markerlabels] = msmt_markers();
 
 %% J2 Estimate
 figure('Position',[fig_x  fig_y  fig_width  fig_height])
-plot(iter_vec, J2_estHistPlot, 'b', 'linewidth', 2);
 hold on
-plot([0 max_iter], [J2 J2], 'r', 'linewidth', 2);
+plot([0 max_iter], [J2_truth J2_truth], 'r', 'linewidth', 2);
+plot(0,J2_estInit,"xr");
+
+for i = 1:num_msmt
+    plot(iter_vec(:,i), J2_estHist(:,i), markers(i));
+end
+hold off
+
 grid on;
 xlabel('Iteration #');
 ylabel('Estimated J2 Parameter');
-legend('Estimated', 'Truth');
+legend(["truth" "initial guess" markerlabels]);
 set(gca, 'fontsize', 14, 'fontweight', 'bold');
 % xlim([0 iterMax_fig])
 
 %% Error History
 figure('Position',[fig_x  fig_y-delta_y fig_width  fig_height])
-plot(iter_vec, err_histPlot,'b', 'linewidth', 2);
+
+hold on
+plot(1:max_iter,err_hist(:,end))
+for i = 1:num_msmt
+    plot(iter_vec(:,i), err_hist(:,i), markers(i));
+end
+hold off
+
 grid on;
 xlabel('Iteration #');
 ylabel('Msmt Estimate Error (m)');
+legend(["mean error" markerlabels]);
 % legend('Estimated', 'Truth', 'location', 'se');
 % set(gca, 'fontsize', 14, 'fontweight', 'bold');
 % xlim([0 iterMax_fig])
+
+
+%% Measurement Markers
+function [markers, markerlabels] = msmt_markers(num_msmt)
+% Creates a vector of measurement markers for the user to reference when
+% plotting.
+
+% create markers
+markers = [...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec", ...
+    "ob", "+g", "*m", ".k", "xo", "squarec"];
+
+% create labels
+for i = 1:8
+    markerlabels(i) = "Msmt " + i;
+end
+markerlabels(9) = "And so on and so forth";
+
+end
