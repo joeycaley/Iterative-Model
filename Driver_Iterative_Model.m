@@ -1,6 +1,6 @@
 clear; close all;
-
 restoredefaultpath
+
 addpath('functions\')
 addpath('TLE\')
 
@@ -20,14 +20,13 @@ J2_truth = 1082.63*10^-6;
 %% Set inputs and settings
 
 %-TLE---------------------------------------------------------------------%
-TLE = "25544 ISS (ZARYA).txt";
-% TLE = "MOLNIYA-3-50.txt";
+% TLE = "25544 ISS (ZARYA).txt";
+TLE = "MOLNIYA-3-50.txt";
 % TLE = 'LANDSAT-7.txt';
-t = [0:1:48*hr]; %MUST BE GREATER THAN 1 PERIOD
 
 
 %-MEASUREMENT SETTINGS----------------------------------------------------%
-t_msmt = [.05:.1:.25]; %as a fraction of orbit period
+t_msmtFrac = [.05:.1:.25]; %as a fraction of orbit period, NO NEGATIVES
 msmt_type = 2;
 % 1: range msmt, perfect with no noise
 % 2: range msmt with noise
@@ -40,7 +39,7 @@ solv_type = 2;
 
 
 %-GAINS-------------------------------------------------------------------%
-Kp = 1.0e-8;
+Kp = -1.0e-8;
 
 
 %-INITIAL J2 GUESS--------------------------------------------------------%
@@ -50,7 +49,7 @@ J2_estInit = 1*10^-3;
 
 
 %-MAX NUMBER OF ITERATIONS------------------------------------------------%
-max_iter = 50;
+max_iter = 125;
 
 
 %-SEED--------------------------------------------------------------------%
@@ -60,7 +59,7 @@ rng(0)
 %% Propogate orbit
 
 % harmonics dynamics
-[OE, x_h, initCond] = createOrbit(TLE, t);
+[OE, x_h, t_msmt, initCond] = createOrbit(TLE, t_msmtFrac);
 r_orbit = x_h(:,1:3);
 v_orbit = x_h(:,4:6);
 
@@ -72,26 +71,16 @@ v_orbit = x_h(:,4:6);
 % [~,x] = ode45('TBP', t, initCond, options);
 % r_2BP = x(:,1:3);
 
-% plot
-figure()
-grid on
-hold on
-% plot3(r_2BP(:,1),r_2BP(:,2),r_2BP(:,3))
-plot3(r_orbit(:,1),r_orbit(:,2),r_orbit(:,3),'r')
-plot3(0,0,0,'.b','MarkerSize',40)
-hold off
-
 %% Create measurment
-
-% convert to times
+num_msmt = length(t_msmt);
 a = OE(1);
 P = 2*pi*sqrt(a^3/mu_e);
-t_msmt = t_msmt*P;
-num_msmt = length(t_msmt);
 
-for i = 1:num_msmt
-    [r_msmt(i), dr_msmt(i)] = create_msmt(msmt_type, t_msmt(i), P, r_orbit, t);
-end
+[r_msmt, dr_msmt] = create_msmt(msmt_type, t_msmtFrac, r_orbit);
+
+% for i = 1:num_msmt
+%     [r_msmt(i), dr_msmt(i)] = create_msmt(msmt_type, t_msmt(i), P, r_orbit);
+% end
 
 %% Setup first run
 
@@ -103,7 +92,7 @@ viable_solv = [1 2];
 % create histories
 r_estHist = zeros(max_iter, length(t_msmt));
 err_hist = zeros(max_iter, length(t_msmt) + 1);
-J2_estHist = zeros(max_iter, length(t_msmt));
+J2_estHist = zeros(max_iter, length(t_msmt) + 1);
 
 %% Iterations
 
@@ -136,9 +125,10 @@ if max(solv_type == viable_solv)
             r_estHist(i,j) = r_est;
             J2_estHist(i,j) = J2_est;
 
-            % calculate mean error after last measurement run
+            % calculate mean error and J2 estimate after last measurement run
             if j == num_msmt
                 err_hist(i,j+1) = mean(err_hist(i,1:j));
+                J2_estHist(i,j+1) = mean(J2_estHist(i,1:j));
             end
         end
     end
@@ -152,7 +142,7 @@ fprintf("\nTRUE J2:          ")
 disp(J2_truth)
 
 fprintf("FINAL J2 ESTIMATE:")
-disp(J2_estHist(end,:))
+disp(J2_estHist(end,end))
 
 format short
 
