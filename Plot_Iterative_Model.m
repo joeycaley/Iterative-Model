@@ -22,6 +22,7 @@ figure('Position',[fig_x  fig_y  fig_width  fig_height])
 hold on
 plot([0 max_iter], [J2_truth J2_truth], 'r', 'linewidth', 2);
 plot(0,J2_estInit,"xr");
+plot(1:max_iter,J2_estHist(:,end), 'b')
 
 for i = 1:num_msmt
     plot(iter_vec(:,i), J2_estHist(:,i), markers(i));
@@ -31,7 +32,7 @@ hold off
 grid on;
 xlabel('Iteration #');
 ylabel('Estimated J2 Parameter');
-legend(["truth" "initial guess" markerlabels]);
+legend(["truth" "initial guess" "mean J2 estimate" markerlabels]);
 set(gca, 'fontsize', 14, 'fontweight', 'bold');
 % xlim([0 iterMax_fig])
 

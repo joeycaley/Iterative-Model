@@ -1,4 +1,4 @@
-function [msmt, rdm] = create_msmt(msmt_type, t_m, P, r, t)
+function [msmt, rdm] = create_msmt(msmt_type, posInOrbit, r)
 % Create measurement at a given time (t_m, fraction of period) for a given 
 % set of orbit data (P (sec), r (m), and t (sec)) of a given measurement 
 % type (msmt_type). Assume geocentric orbit.
@@ -7,10 +7,8 @@ function [msmt, rdm] = create_msmt(msmt_type, t_m, P, r, t)
 %       msmt_type: what is being measured/outputted
 %           1: range, deterministic
 %           2: range, with noise
-%       t_m: time of measurement
-%       P: period of orbit (sec)
+%       t_m: time of measurement as a fraction of period
 %       r: radius vector of orbit over time
-%       t: time duration that orbital data is given over
 %      
 % OUTPUT:
 %       msmt: measurement of the selected type
@@ -22,26 +20,30 @@ global mu_e
 noise = 100; %set noise parameter for noisy msmt, in meters
 
 if msmt_type == 1
-    msmt = interp1(t, r, t_m); %getmeas(t);
-    msmt = norm(msmt);
+    msmt = sqrt(r(:,1).^2 + r(:,2).^2 + r(:,3).^2);
 
-    posInOrbit = t_m/P - floor(t_m/P);
+    posInOrbit = posInOrbit - floor(posInOrbit);
 
-    if posInOrbit <= .5
-        rdm = +1;
-    else % posInOrbit > .5
-        rdm = -1;
+    for i = 1:length(posInOrbit)
+        if posInOrbit(i) < .5
+            rdm(i) = +1;
+        else % posInOrbit(i) >= .5
+            rdm(i) = -1;
+        end
     end
+
 elseif msmt_type == 2
-    msmt = interp1(t, r, t_m); %getmeas(t);
-    msmt = norm(msmt) + randn*noise;
+    msmt = sqrt(r(:,1).^2 + r(:,2).^2 + r(:,3).^2);
+    msmt = msmt + randn(length(posInOrbit),1)*noise;
 
-    posInOrbit = t_m/P - floor(t_m/P);
+    posInOrbit = posInOrbit - floor(posInOrbit);
 
-    if posInOrbit <= .5
-        rdm = +1;
-    else % posInOrbit > .5
-        rdm = -1;
+    for i = 1:length(posInOrbit)
+        if posInOrbit(i) < .5
+            rdm(i) = +1;
+        else % posInOrbit(i) >= .5
+            rdm(i) = -1;
+        end
     end
 else
     error("MEASUREMENT TYPE UNDEFINED")
