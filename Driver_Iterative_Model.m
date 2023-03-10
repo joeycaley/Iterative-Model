@@ -20,26 +20,27 @@ J2_truth = 1082.63*10^-6;
 %% Set inputs and settings
 
 %-TLE---------------------------------------------------------------------%
-% TLE = "25544 ISS (ZARYA).txt";
-TLE = "MOLNIYA-3-50.txt";
+TLE = "25544 ISS (ZARYA).txt";
+% TLE = "MOLNIYA-3-50.txt";
 % TLE = 'LANDSAT-7.txt';
 
 
 %-MEASUREMENT SETTINGS----------------------------------------------------%
-t_msmtFrac = [.05:.1:.25]; %as a fraction of orbit period, NO NEGATIVES
-msmt_type = 2;
+t_msmtFrac = [.05:.025:.85]; %as a fraction of orbit period, NO NEGATIVES
+msmt_type = 1;
 % 1: range msmt, perfect with no noise
 % 2: range msmt with noise
+% 3: range msmt with noise AND a bad measurement
 
 
 %-SOLVER------------------------------------------------------------------%
-solv_type = 2;
+solv_type = 1;
 % 1: start prop from 0 each time
 % 2: start prop from prev msmt
 
 
 %-GAINS-------------------------------------------------------------------%
-Kp = -1.0e-8;
+Kp = 1.0e-8;
 
 
 %-INITIAL J2 GUESS--------------------------------------------------------%
@@ -76,7 +77,7 @@ num_msmt = length(t_msmt);
 a = OE(1);
 P = 2*pi*sqrt(a^3/mu_e);
 
-[r_msmt, dr_msmt] = create_msmt(msmt_type, t_msmtFrac, r_orbit);
+[r_msmt, dr_msmt] = create_msmt(msmt_type, t_msmtFrac, r_orbit, num_msmt);
 
 % for i = 1:num_msmt
 %     [r_msmt(i), dr_msmt(i)] = create_msmt(msmt_type, t_msmt(i), P, r_orbit);
