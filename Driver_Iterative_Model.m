@@ -26,27 +26,27 @@ TLE = "25544 ISS (ZARYA).txt";
 
 
 %-MEASUREMENT SETTINGS----------------------------------------------------%
-t_msmtFrac = [.05:.1:.45]; %as a fraction of orbit period, NO NEGATIVES
-msmt_type = 1;
-% 1: range msmt, perfect with no noise
-% 2: range msmt with noise
-% 3: range msmt with noise AND a bad measurement
+t_msmtFrac = [.05:.1:.55]; %as a fraction of orbit period, NO NEGATIVES
+msmt_type = 3;
+% 1 PERFECT: range msmt, perfect with no noise
+% 2 NOISY:   range msmt with noise
+% 3 FLAWED:  range msmt with noise AND a bad measurement
 
 
 %-SOLVER------------------------------------------------------------------%
-solv_type = 4;
+solv_type = 2;
 % 1: prop to all msmts in sequence each loop, start prop from 0 each time
 % 2: prop to all msmts in sequence each loop, start prop from prev msmt
 % 3: loop over one msmt at a time, start prop from 0 each time
 % 4: loop over one msmt at a time, start prop from prev msmt
 
 %-GAINS-------------------------------------------------------------------%
-% Kp = 1.0e-8; % works for sovler 1 & 2. + for ISS/LANDSAT, - for Molniya
-Kp = 0.9e-9;
+Kp = 1.0e-8; % works for sovler 1 & 2. + for ISS/LANDSAT, - for Molniya
+% Kp = 7.0e-10;
 
 
 %-INITIAL J2 GUESS--------------------------------------------------------%
-J2_estInit = 1000*10^-6;
+J2_estInit = 1000*10^-5;
 % J2_estInit = 6.484993079129698e-04;
 % J2_estInit = J2_truth;
 

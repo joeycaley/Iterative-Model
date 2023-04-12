@@ -1,6 +1,5 @@
 function OE = OEfromTLE(fname)
 
-
 global mu_e %  Standard gravitational parameter for the earth
 global deg2rad
 
