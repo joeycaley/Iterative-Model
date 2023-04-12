@@ -18,27 +18,46 @@ end
 [markers, markerlabels] = msmt_markers();
 
 %% J2 Estimate SIMPLE
-figure('Position',[fig_x  fig_y  fig_width  fig_height])
+figure('Position',[fig_x  50  fig_width  2.8*fig_height])
+subplot(2,1,1)
 hold on
-plot([0 max_iter], [J2_truth J2_truth], 'r', 'linewidth', 2);
-plot(0,J2_estInit,"xr");
-plot(1:max_iter,J2_estHist(:,end), 'b')
+plot([0 max_iter], [J2_truth J2_truth], 'r', 'linewidth', 6);
+plot(0,J2_estInit,"xr", 'MarkerSize',15,'LineWidth',3);
+plot(1:max_iter,J2_estHist(:,end), 'b','LineWidth',6)
 
 grid on;
 xlabel('Iteration #');
 ylabel('Estimated J2 Parameter');
 legend(["truth" "initial guess" "mean J2 estimate"]);
-set(gca, 'fontsize', 14, 'fontweight', 'bold');
+set(gca, 'fontsize', 22, 'fontweight', 'bold');
+
+xlim([0 50])
+
+%% Error History SIMPLE
+% figure('Position',[fig_x  fig_y-delta_y fig_width  fig_height])
+subplot(2,1,2)
+hold on
+plot(1:max_iter,err_hist(:,end),'linewidth',6)
+hold off
+
+grid on;
+xlabel('Iteration #');
+ylabel('Msmt Estimate Error (m)');
+legend(["mean error"]);
+set(gca, 'fontsize', 22, 'fontweight', 'bold');
+
+xlim([0 50])
 
 %% J2 Estimate ALL
-figure('Position',[fig_x  fig_y  fig_width  fig_height])
+figure('Position',[fig_x  50  fig_width  2.8*fig_height])
+subplot(2,1,1)
 hold on
-plot([0 max_iter], [J2_truth J2_truth], 'r', 'linewidth', 2);
-plot(0,J2_estInit,"xr");
-plot(1:max_iter,J2_estHist(:,end), 'b')
+plot([0 max_iter], [J2_truth J2_truth], 'r', 'linewidth', 6);
+plot(0,J2_estInit,"xr",'MarkerSize',15,'LineWidth',3);
+plot(1:max_iter,J2_estHist(:,end), 'b', 'linewidth', 6)
 
 for i = 1:num_msmt
-    plot(iter_vec(:,i), J2_estHist(:,i), markers(i));
+    plot(iter_vec(:,i), J2_estHist(:,i), markers(i),'MarkerSize',10,'LineWidth',3);
 end
 hold off
 
@@ -46,29 +65,17 @@ grid on;
 xlabel('Iteration #');
 ylabel('Estimated J2 Parameter');
 legend(["truth" "initial guess" "mean J2 estimate" markerlabels]);
-set(gca, 'fontsize', 14, 'fontweight', 'bold');
+set(gca, 'fontsize', 22, 'fontweight', 'bold');
 
-
-%% Error History SIMPLE
-figure('Position',[fig_x  fig_y-delta_y fig_width  fig_height])
-
-hold on
-plot(1:max_iter,err_hist(:,end))
-hold off
-
-grid on;
-xlabel('Iteration #');
-ylabel('Msmt Estimate Error (m)');
-legend(["mean error"]);
-set(gca, 'fontsize', 14, 'fontweight', 'bold');
+xlim([0 50])
 
 %% Error History ALL
-figure('Position',[fig_x  fig_y-delta_y fig_width  fig_height])
-
+% figure('Position',[fig_x  fig_y-delta_y fig_width  fig_height])
+subplot(2,1,2)
 hold on
-plot(1:max_iter,err_hist(:,end))
+plot(1:max_iter,err_hist(:,end),'linewidth', 6)
 for i = 1:num_msmt
-    plot(iter_vec(:,i), err_hist(:,i), markers(i));
+    plot(iter_vec(:,i), err_hist(:,i), markers(i), 'MarkerSize',10,'LineWidth',3);
 end
 hold off
 
@@ -76,8 +83,9 @@ grid on;
 xlabel('Iteration #');
 ylabel('Msmt Estimate Error (m)');
 legend(["mean error" markerlabels]);
-set(gca, 'fontsize', 14, 'fontweight', 'bold');
+set(gca, 'fontsize', 22, 'fontweight', 'bold');
 
+xlim([0 50])
 
 %% Measurement Markers
 function [markers, markerlabels] = msmt_markers(num_msmt)

@@ -22,7 +22,7 @@ orbit_setup
 %% Set up the iterations USER INPUT
 %measurements
 t1m = 0.20*P_nom;   %og first measurement @ clock time: 20% of period
-t2m = 0.40*P_nom;   %og second measurement @ clock time: 40% of period
+t2m = 0.44*P_nom;   %og second measurement @ clock time: 40% of period
 
 [f1_nom, E1_nom, r1m, rd1m] = createMeasurement(mue, orb_nom, t, xhis, t1m);
 [f2_nom, E2_nom, r2m, rd2m] = createMeasurement(mue, orb_nom, t, xhis, t2m);
