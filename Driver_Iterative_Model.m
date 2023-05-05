@@ -27,6 +27,7 @@ TLE = "25544 ISS (ZARYA).txt";
 
 %-MEASUREMENT SETTINGS----------------------------------------------------%
 t_msmtFrac = [.05:.1:.55]; %as a fraction of orbit period, NO NEGATIVES
+% t_msmtFrac = [.05:.1:.45];
 msmt_type = 3;
 % 1 PERFECT: range msmt, perfect with no noise
 % 2 NOISY:   range msmt with noise
@@ -34,7 +35,7 @@ msmt_type = 3;
 
 
 %-SOLVER------------------------------------------------------------------%
-solv_type = 2;
+solv_type = 3;
 % 1: prop to all msmts in sequence each loop, start prop from 0 each time
 % 2: prop to all msmts in sequence each loop, start prop from prev msmt
 % 3: loop over one msmt at a time, start prop from 0 each time
@@ -47,12 +48,14 @@ Kp = 1.0e-8; % works for sovler 1 & 2. + for ISS/LANDSAT, - for Molniya
 
 %-INITIAL J2 GUESS--------------------------------------------------------%
 J2_estInit = 1000*10^-5;
+% J2_estInit = 1000*10^-6;
 % J2_estInit = 6.484993079129698e-04;
 % J2_estInit = J2_truth;
 
 
 %-MAX NUMBER OF ITERATIONS------------------------------------------------%
 max_iter = 100;
+% max_iter = 250;
 
 
 %-SEED--------------------------------------------------------------------%
@@ -89,46 +92,6 @@ J2_est = J2_estInit;
 
 [J2_estHist, r_estHist, err_hist] = iterative_solver(solv_type, r_msmt, ...
     dr_msmt, t_msmt, J2_estInit, Kp, max_iter, initCond);
-
-% if max(solv_type == viable_solv)
-%     for i = 1:max_iter
-%         for j = 1:num_msmt
-%         
-%             % Set initial condition depending on solver & msmt #
-%             if solv_type == 2 && j ~= 1
-%                 initCondLoop = x_loop(end)';
-%             else
-%                 initCondLoop = initCond;
-%             end
-%     
-%             % propogate
-%             options = odeset('AbsTol',AbsTol,'RelTol',RelTol);
-%     
-%             [t_loop,x_loop] = ode45(@(t_loop,x_loop) TBP_UnknownHarmonics(...
-%                 t_loop,x_loop,J2_est), [0 t_msmt(j)], initCond, options);
-%     
-%             % create final range
-%             r_est = norm(x_loop(end,1:3));
-%     
-%             % Error and correction
-%             err = r_est - r_msmt(j);
-%             J2_est = J2_est - Kp*err;
-%     
-%             % input histories
-%             err_hist(i,j) = err;
-%             r_estHist(i,j) = r_est;
-%             J2_estHist(i,j) = J2_est;
-% 
-%             % calculate mean error and J2 estimate after last measurement run
-%             if j == num_msmt
-%                 err_hist(i,j+1) = mean(err_hist(i,1:j));
-%                 J2_estHist(i,j+1) = mean(J2_estHist(i,1:j));
-%             end
-%         end
-%     end
-% else
-%     error("ERROR SOLVER TYPE UNDEFINED")
-% end
 
 format shortEng
 
