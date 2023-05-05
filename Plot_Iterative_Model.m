@@ -37,7 +37,7 @@ xlim([0 50])
 % figure('Position',[fig_x  fig_y-delta_y fig_width  fig_height])
 subplot(2,1,2)
 hold on
-plot(1:max_iter,err_hist(:,end),'linewidth',6)
+plot(1:max_iter,err_hist(:,end),'b','linewidth',6)
 hold off
 
 grid on;
@@ -67,13 +67,13 @@ ylabel('Estimated J2 Parameter');
 legend(["truth" "initial guess" "mean J2 estimate" markerlabels]);
 set(gca, 'fontsize', 22, 'fontweight', 'bold');
 
-xlim([0 50])
+xlim([0 10])
 
 %% Error History ALL
 % figure('Position',[fig_x  fig_y-delta_y fig_width  fig_height])
 subplot(2,1,2)
 hold on
-plot(1:max_iter,err_hist(:,end),'linewidth', 6)
+plot(1:max_iter,err_hist(:,end),'b','linewidth', 6)
 for i = 1:num_msmt
     plot(iter_vec(:,i), err_hist(:,i), markers(i), 'MarkerSize',10,'LineWidth',3);
 end
@@ -85,7 +85,7 @@ ylabel('Msmt Estimate Error (m)');
 legend(["mean error" markerlabels]);
 set(gca, 'fontsize', 22, 'fontweight', 'bold');
 
-xlim([0 50])
+xlim([0 10])
 
 %% Measurement Markers
 function [markers, markerlabels] = msmt_markers(num_msmt)
@@ -94,7 +94,7 @@ function [markers, markerlabels] = msmt_markers(num_msmt)
 
 % create markers
 markers = [...
-    "ob", "+g", "*m", ".k", "squarec", ...
+    "ob", "+g", "*m", "squarek", "*c", ...
     "ob", "+g", "*m", ".k", "squarec", ...
     "ob", "+g", "*m", ".k", "squarec", ...
     "ob", "+g", "*m", ".k", "squarec", ...
