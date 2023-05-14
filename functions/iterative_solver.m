@@ -3,7 +3,7 @@ function [J2_estHist, r_estHist, err_hist] = iterative_solver(solv_type, ...
 %% Setup
 
 % viable solver types
-viable_solv = [1 2 3];
+viable_solv = [1 2 3 4];
 
 % initialize J2_est
 J2_est = J2_estInit;
@@ -27,20 +27,13 @@ if solv_type == 1 || solv_type == 2
             % Set initial condition depending on solver & msmt #
             if solv_type == 2 && j ~= 1
                 initCondLoop = x_loop(end,:)';
-%                 t_i = t_msmt(j-1);
-%                 t_i = 0;
 
                 t_f = t_msmt(j) - t_msmt(j-1);
-%                 t_f = t_msmt(j);
 
             else % 1st measurment and/or solver type 1
                 initCondLoop = initCond;
-%                 t_i = 0;
                 t_f = t_msmt(j);
             end
-    
-            % propogate
-%             options = odeset('AbsTol',AbsTol,'RelTol',RelTol);
     
             [t_loop,x_loop] = ode45(@(t_loop,x_loop) TBP_UnknownHarmonics(...
                 t_loop,x_loop,J2_est), [0 t_f], initCondLoop, options);
