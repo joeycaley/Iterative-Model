@@ -44,11 +44,11 @@ t_plot = 0:1:10*P;
 [~, x_plot] = ode45('TBP_Harmonics', t_plot, initCond, options);
 
 % plot
-figure()
-grid on
-hold on
-plot3(x_plot(:,1),x_plot(:,2),x_plot(:,3),'r')
-plot3(0,0,0,'.b','MarkerSize',40)
-hold off
+% figure()
+% grid on
+% hold on
+% plot3(x_plot(:,1),x_plot(:,2),x_plot(:,3),'r')
+% plot3(0,0,0,'.b','MarkerSize',40)
+% hold off
 
 end
